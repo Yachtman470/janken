@@ -67,6 +67,10 @@ li:hover {
     justify-content: center;
 }
 
+.single_result{
+    text-align: center;
+}
+
 /* HPゲージ */
 #my_hp {
     margin: 0 auto;
