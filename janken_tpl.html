@@ -16,28 +16,79 @@
   </header>
 
   <main>
+    <div id="janken-img">
+      <img src="./img/janken.png" alt="じゃんけんの絵" width="150" height="150" vspace="50">
+    </div>
+
     <ul>
-      <li id="gu_btn">グー</li>
-      <li id="cho_btn">チョキ</li>
-      <li id="par_btn">パー</li>
+      <li class="hand_btn" id="gu_btn">グー</li>
+      <li class="hand_btn" id="cho_btn">チョキ</li>
+      <li class="hand_btn" id="par_btn">パー</li>
     </ul>
     <div>コンピュータの出した手は？「<span id="pc_hands">なに？</span>」</div>
-    <div id="judgment">勝ち</div>
+    <div>結果：<span id="judgement"></span></div>
   </main>
 
   <footer></footer>
   <script>
-    //じゃんけん用のSCRIPTを書いてください
-    let num = Math.ceil(Math.random() * 3);
-    console.log(num);
+    // 画像回転用script
+    var kakudo = 0;     // 角度用変数
+    $(function () {
+      // タイマースタート kaiten() を100ミリ秒間隔で実行
+      tm = setInterval("kaiten()", 100);
+    });
 
+    function kaiten() {
+      kakudo += 10;     // 角度+10
+      // img という id を持つ要素を回転する
+      $("#janken-img").css("transform", "rotate(" + kakudo + "deg)");
+    }
 
+    // じゃんけん用script
+    $("#gu_btn").on("click", function () {
+      let num = Math.ceil(Math.random() * 3);
+      console.log(num)
+      if (num == 1) {
+        $("#pc_hands").text("グー");
+        $("#judgement").text("引き分け");
+      } else if (num == 2) {
+        $("#pc_hands").text("チョキ");
+        $("#judgement").text("あなたの勝ち");
+      } else {
+        $("#pc_hands").text("パー");
+        $("#judgement").text("あなたの負け");
+      }
+    })
 
+    $("#cho_btn").on("click", function () {
+      let num = Math.ceil(Math.random() * 3);
+      console.log(num)
+      if (num == 1) {
+        $("#pc_hands").text("グー");
+        $("#judgement").text("あなたの負け");
+      } else if (num == 2) {
+        $("#pc_hands").text("チョキ");
+        $("#judgement").text("引き分け");
+      } else {
+        $("#pc_hands").text("パー");
+        $("#judgement").text("あなたの勝ち");
+      }
+    })
 
-
-
-
-
+    $("#par_btn").on("click", function () {
+      let num = Math.ceil(Math.random() * 3);
+      console.log(num)
+      if (num == 1) {
+        $("#pc_hands").text("グー");
+        $("#judgement").text("あなたの勝ち");
+      } else if (num == 2) {
+        $("#pc_hands").text("チョキ");
+        $("#judgement").text("あなたの負け");
+      } else {
+        $("#pc_hands").text("パー");
+        $("#judgement").text("引き分け");
+      }
+    })
   </script>
 </body>
 
