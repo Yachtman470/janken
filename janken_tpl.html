@@ -20,6 +20,25 @@
       <img src="./img/janken.png" alt="じゃんけんの絵" width="150" height="150" vspace="50">
     </div>
 
+    <!-- 5勝/5敗したら最終結果表示 -->
+    <p id="result">先に5勝した方が勝利！</p>
+    <p id="memory">戦績：</p>
+
+    <!-- 自分のHPゲージ -->
+    <div id="my_hp">
+      <p class="name_p">自分のHP</p>
+      <div id="my_frame"></div>
+      <div id="my_bar"></div>
+      <div id="my_mark"></div>
+    </div>
+
+    <!-- PCのHPゲージ -->
+    <div id="pc_hp">
+      <p class="name_p">相手のHP</p>
+      <div id="pc_bar"></div>
+      <div id="pc_mark"></div>
+    </div>
+
     <ul>
       <li class="hand_btn" id="gu_btn">グー</li>
       <li class="hand_btn" id="cho_btn">チョキ</li>
@@ -31,6 +50,66 @@
 
   <footer></footer>
   <script>
+    // HPゲージの動作
+    const my_lifeBar = document.getElementById('my_bar')         // ライフバー
+    const my_lifeMark = document.getElementById('my_mark')       // ライフの光部分
+    let my_life = 100                                              // ライフ初期値
+    my_lifeBar.style.width = "100%"                                // ライフ初期幅
+    const pc_lifeBar = document.getElementById('pc_bar')         // ライフバー
+    const pc_lifeMark = document.getElementById('pc_mark')       // ライフの光部分
+    let pc_life = 100                                              // ライフ初期値
+    pc_lifeBar.style.width = "100%"                                // ライフ初期幅
+
+    let result = document.getElementById('result'); //宣言
+    const memory = document.getElementById('memory')
+
+    // *** ライフ変更処理 ***
+    function alterLife_me(value) {
+      // lifeの値を算出する
+      my_life += value
+      if (my_life <= 0) {
+        // 算出の結果 0 以下になった場合
+        my_life = 0
+        result.textContent = 'YOU LOSE...';
+        // 0.3秒後に光部分を非表示にする
+        setTimeout(function () {
+          my_lifeMark.style.visibility = 'hidden'
+        }, 300)
+      } else {
+        // 算出の結果 100 を超過した場合
+        if (my_life > 100) {
+          my_life = 100
+        }
+        // 光部分を表示する
+        my_lifeMark.style.visibility = 'visible'
+      }
+      // スタイル(幅)を更新する
+      my_lifeBar.style.width = my_life + "%"
+    }
+
+    function alterLife_pc(value) {
+      // lifeの値を算出する
+      pc_life += value
+      if (pc_life <= 0) {
+        // 算出の結果 0 以下になった場合
+        pc_life = 0
+        result.textContent = 'YOU WIN!';
+        // 0.3秒後に光部分を非表示にする
+        setTimeout(function () {
+          pc_lifeMark.style.visibility = 'hidden'
+        }, 300)
+      } else {
+        // 算出の結果 100 を超過した場合
+        if (pc_life > 100) {
+          pc_life = 100
+        }
+        // 光部分を表示する
+        pc_lifeMark.style.visibility = 'visible'
+      }
+      // スタイル(幅)を更新する
+      pc_lifeBar.style.width = pc_life + "%"
+    }
+
     // 画像回転用script
     var kakudo = 0;     // 角度用変数
     $(function () {
@@ -51,12 +130,19 @@
       if (num == 1) {
         $("#pc_hands").text("グー");
         $("#judgement").text("引き分け");
+        memory.appendChild(document.createTextNode("△"));
       } else if (num == 2) {
         $("#pc_hands").text("チョキ");
         $("#judgement").text("あなたの勝ち");
+        memory.appendChild(document.createTextNode("○"));
+        // 相手のHPゲージを減らす
+        alterLife_pc(-20);
       } else {
         $("#pc_hands").text("パー");
         $("#judgement").text("あなたの負け");
+        memory.appendChild(document.createTextNode("×"));
+        // 自分のHPゲージを減らす
+        alterLife_me(-20);
       }
     })
 
@@ -66,12 +152,19 @@
       if (num == 1) {
         $("#pc_hands").text("グー");
         $("#judgement").text("あなたの負け");
+        memory.appendChild(document.createTextNode("×"));
+        // 自分のHPゲージを減らす
+        alterLife_me(-20);
       } else if (num == 2) {
         $("#pc_hands").text("チョキ");
         $("#judgement").text("引き分け");
+        memory.appendChild(document.createTextNode("△"));
       } else {
         $("#pc_hands").text("パー");
         $("#judgement").text("あなたの勝ち");
+        memory.appendChild(document.createTextNode("○"));
+        // 相手のHPゲージを減らす
+        alterLife_pc(-20);
       }
     })
 
@@ -81,12 +174,19 @@
       if (num == 1) {
         $("#pc_hands").text("グー");
         $("#judgement").text("あなたの勝ち");
+        memory.appendChild(document.createTextNode("○"));
+        // 相手のHPゲージを減らす
+        alterLife_pc(-20);
       } else if (num == 2) {
         $("#pc_hands").text("チョキ");
         $("#judgement").text("あなたの負け");
+        memory.appendChild(document.createTextNode("×"));
+        // 自分のHPゲージを減らす
+        alterLife_me(-20);
       } else {
         $("#pc_hands").text("パー");
         $("#judgement").text("引き分け");
+        memory.appendChild(document.createTextNode("△"));
       }
     })
   </script>
